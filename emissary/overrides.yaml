@@ -1,0 +1,81 @@
+service:
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+    protocol: TCP
+    nodePort: 30080
+    # hostPort: 80
+  - name: https
+    port: 443
+    targetPort: 8443
+    protocol: TCP
+    nodePort: 30443
+    # hostPort: 443
+  # TCPMapping_Port
+    # port: 2222
+    # targetPort: 2222
+    # protocol: TCP
+    # nodePort: 30222
+  externalTrafficPolicy:
+  sessionAffinity:
+  sessionAffinityConfig:
+  externalIPs: []
+  annotations: {}
+  # Manually set the name of the generated Service
+  nameOverride:
+
+adminService:
+  # If true, create a service for Ambassador's admin UI
+  create: true
+  type: NodePort
+  port: 8877
+  snapshotPort: 8005
+  # If explicit NodePort for admin service is required
+  nodePort: 30077
+  # Annotations to apply to Ambassador admin service
+  annotations: {}
+  # IP address to assign (if cloud provider supports it)
+  loadBalancerIP:
+  # Passed to cloud provider load balancer if created (e.g: AWS ELB)
+  loadBalancerSourceRanges:
+
+# Resolvers are used to configure the discovery service strategy for Ambasador
+# See: https://www.getambassador.io/docs/edge-stack/latest/topics/running/resolvers/
+#
+# Example:
+# Configuration for a Consul Resolver
+#   address: consul-server.default.svc.cluster.local:8500
+#   datacenter: dc1
+resolvers: # +doc-gen:break
+  endpoint:
+    create: false
+    name: endpoint
+  consul:
+    create: false
+    name: consul-dc1
+    spec: {}
+
+# Create and manage an Ambassador Module from the Helm Chart. See:
+# https://www.getambassador.io/docs/edge-stack/latest/topics/running/ambassador
+# for more info on the available options.
+#
+# Note: The Module can only be named ambassador. There can only be one Module
+# installed per-namespace.
+module: {}
+
+# Configure the ambassador agent
+agent:
+  # If `true`, installs the ambassador-agent Deployment, ServiceAccount and ClusterRole in the ambassador namespace, enabling the Service Catalog
+  enabled: false
+  # API token for reporting snapshots to the [Service Catalog](https://app.getambassador.io/cloud/catalog/);
+  # If empty, agent will not report snapshots
+  cloudConnectToken: ''
+  # Address of the ambassador Service Catalog rpc server.
+  rpcAddress: https://app.getambassador.io/
+  createArgoRBAC: true
+  image:
+    # Leave blank to use image.repository and image.tag
+    tag:
+    repository:

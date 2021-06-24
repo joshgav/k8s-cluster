@@ -1,0 +1,26 @@
+apiVersion: database.aws.crossplane.io/v1beta1
+kind: RDSInstance
+metadata:
+  name: my-crossplane-rdsinstance
+  namespace: crossplane-system
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    allocatedStorage: 20
+    allowMajorVersionUpgrade: true
+    applyModificationsImmediately: true
+    autoMinorVersionUpgrade: true
+    dbInstanceClass: db.t3.small
+    dbName: postgres
+    engine: postgres
+    engineVersion: "13.2"
+    masterUsername: postgres
+    publiclyAccessible: false
+    region: us-east-1
+  providerConfigRef:
+    name: default
+  providerRef:
+    name: provider-aws
+  writeConnectionSecretToRef:
+    name: rdsinstance-secret
+    namespace: crossplane-system

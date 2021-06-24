@@ -1,0 +1,3 @@
+component_name=ambassador
+component_namespace=ambassador
+release_name=${component_name}-beta1

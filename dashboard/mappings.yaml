@@ -1,0 +1,9 @@
+---
+apiVersion: getambassador.io/v2
+kind:  Mapping
+metadata:
+  name: dashboard
+  namespace: dashboard
+spec:
+  prefix: /console/
+  service: http://dashboard-beta1-kubernetes-dashboard
