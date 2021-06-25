@@ -6,4 +6,4 @@ metadata:
   namespace: dashboard
 spec:
   prefix: /console/
-  service: http://dashboard-beta1-kubernetes-dashboard
+  service: https://dashboard-beta1-kubernetes-dashboard
