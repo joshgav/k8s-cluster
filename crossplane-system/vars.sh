@@ -1,0 +1,2 @@
+component_name=crossplane
+component_namespace=crossplane-system

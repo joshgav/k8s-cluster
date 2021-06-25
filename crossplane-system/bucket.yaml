@@ -1,8 +1,10 @@
 apiVersion: s3.aws.crossplane.io/v1beta1
 kind: Bucket
 metadata:
-  name: my-crossplane-bucket
+  generateName: test-bucket-crossplane-
   namespace: crossplane-system
+  labels:
+    managed-by: test
 spec:
   deletionPolicy: Delete
   forProvider:
@@ -11,7 +13,7 @@ spec:
   providerConfigRef:
     name: default
   providerRef:
-    name: provider-aws
+    name: aws
   writeConnectionSecretToRef:
-    name: bucket-secret
+    name: test-bucket-secret
     namespace: crossplane-system
