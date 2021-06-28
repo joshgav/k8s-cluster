@@ -1,10 +1,10 @@
 #! /usr/bin/env bash
 
 declare -r this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
-declare -r root_dir=$(cd ${this_dir}/.. && pwd)
-source ${this_dir}/vars.sh
+declare -r root_dir=$(cd ${this_dir}/../.. && pwd)
+source ${this_dir}/../vars.sh
 
-kubectl create -f ${this_dir}/bucket.yaml
+kubectl create -f ${this_dir}/aws-bucket.yaml
 kubectl wait --for condition=Ready buckets.s3.aws.crossplane.io \
     --selector "managed-by=test"
 

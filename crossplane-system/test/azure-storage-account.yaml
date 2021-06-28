@@ -1,0 +1,24 @@
+---
+apiVersion: storage.azure.crossplane.io/v1alpha3
+kind: Account
+metadata:
+  name: storaccountcrossplane
+  namespace: crossplane-system
+  labels:
+    managed-by: test
+spec:
+  resourceGroupName: storage-crossplane
+  storageAccountSpec:
+    kind: Storage
+    location: eastus
+    sku:
+      name: Standard_LRS
+      tier: Standard
+  deletionPolicy: Delete
+  providerConfigRef:
+    name: default
+  providerRef:
+    name: azure
+  writeConnectionSecretToRef:
+    name: storaccountcrossplane
+    namespace: crossplane-system

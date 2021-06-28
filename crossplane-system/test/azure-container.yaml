@@ -1,0 +1,17 @@
+apiVersion: storage.azure.crossplane.io/v1alpha3
+kind: Container
+metadata:
+  name: crossplane
+  namespace: crossplane-system
+  labels:
+    managed-by: test
+spec:
+  publicAccessType: container
+  deletionPolicy: Delete
+  providerConfigRef:
+    name: storaccountcrossplane
+  providerRef:
+    name: azure
+  writeConnectionSecretToRef:
+    name: storage-ctr-crossplane
+    namespace: crossplane-system

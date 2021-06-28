@@ -1,0 +1,17 @@
+apiVersion: azure.crossplane.io/v1alpha3
+kind: ResourceGroup
+metadata:
+  name: storage-crossplane
+  namespace: crossplane-system
+  labels:
+    managed-by: test
+spec:
+  location: eastus
+  deletionPolicy: Delete
+  providerConfigRef:
+    name: default
+  providerRef:
+    name: azure
+  writeConnectionSecretToRef:
+    name: storage-group-crossplane
+    namespace: crossplane-system
