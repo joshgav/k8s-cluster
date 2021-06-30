@@ -1,0 +1,159 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: aws-bucket
+spec:
+  compositeTypeRef:
+    apiVersion: joshgav.com/v1alpha1
+    kind: UniversalBucket
+  writeConnectionSecretsToNamespace: crossplane-system
+  patchSets:
+  - name: metadata
+    patches:
+    - type: FromCompositeFieldPath
+      fromFieldPath: metadata.name
+    - type: FromCompositeFieldPath
+      fromFieldPath: metadata.name
+      toFieldPath: metadata.annotations[crossplane.io/external-name]
+    - type: FromCompositeFieldPath
+      fromFieldPath: metadata.namespace
+    - type: FromCompositeFieldPath
+      fromFieldPath: metadata.namespace
+      toFieldPath: spec.writeConnectionSecretToRef.namespace
+    - type: CombineFromComposite
+      toFieldPath: spec.writeConnectionSecretToRef.name
+      combine:
+        strategy: string
+        variables:
+          - fromFieldPath: metadata.name
+          - fromFieldPath: kind
+        string:
+          fmt: "%s-%s"
+  resources:
+  - name: bucket
+    base:
+      apiVersion: s3.aws.crossplane.io/v1beta1
+      kind: Bucket
+      metadata:
+        labels:
+          managed-by: crossplane
+      spec:
+        deletionPolicy: Orphan
+        providerConfigRef:
+          name: default
+        forProvider:
+          acl: private
+          locationConstraint: us-east-1
+          tagging:
+            tagSet:
+            - key: CostCenter
+              value: _TBD_
+        writeConnectionSecretToRef:
+          name: _TBD_
+          namespace: _TBD_
+    patches:
+    - type: PatchSet
+      patchSetName: metadata
+    - type: FromCompositeFieldPath
+      fromFieldPath: spec.bucketRegion
+      toFieldPath: spec.forProvider.locationConstraint
+    - type: FromCompositeFieldPath
+      fromFieldPath: spec.costCenter
+      toFieldPath: spec.forProvider.tagging.tagSet[0].value # CostCenter
+    - type: ToCompositeFieldPath
+      fromFieldPath: status.atProvider.arn
+      toFieldPath: status.bucketARN
+    connectionDetails:
+    - name: region
+      type: FromConnectionSecretKey
+      fromConnectionSecretKey: region
+    - name: endpoint
+      type: FromConnectionSecretKey
+      fromConnectionSecretKey: endpoint
+  - name: iam-policy
+    patches:
+    - type: PatchSet
+      patchSetName: metadata
+    - type: FromCompositeFieldPath
+      fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.name
+    - type: FromCompositeFieldPath
+      fromFieldPath: status.bucketARN
+      toFieldPath: spec.forProvider.document
+      transforms:
+      - type: string
+        string:
+          fmt: |
+            {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                    "Sid": "AllowS3",
+                    "Effect": "Allow",
+                    "Action": "s3:*",
+                    "Resource": "%s"
+                }
+              ]
+            }
+    - type: ToCompositeFieldPath
+      fromFieldPath: status.atProvider.arn
+      toFieldPath: status.policyARN
+    base:
+      apiVersion: identity.aws.crossplane.io/v1alpha1
+      kind: IAMPolicy
+      metadata:
+        labels:
+          managed-by: crossplane
+      spec:
+        deletionPolicy: Delete
+        providerConfigRef:
+          name: default
+        forProvider:
+          description: 'policy for bucket'
+          document: _TBD_
+          name: _TBD_
+  - name: iam-user
+    patches:
+    - type: PatchSet
+      patchSetName: metadata
+    - type: FromCompositeFieldPath
+      fromFieldPath: status.bucketARN
+      toFieldPath: spec.forProvider.permissionsBoundary
+    - type: ToCompositeFieldPath
+      fromFieldPath: status.atProvider.arn
+      toFieldPath: status.userARN
+    base:
+      apiVersion: identity.aws.crossplane.io/v1alpha1
+      kind: IAMUser
+      metadata:
+        labels:
+          managed-by: crossplane
+      spec:
+        deletionPolicy: Delete
+        providerConfigRef:
+          name: default
+        forProvider:
+          permissionsBoundary: _refToIAMPolicy_
+  - name: iam-accesskey
+    patches:
+    - type: PatchSet
+      patchSetName: metadata
+    - type: FromCompositeFieldPath
+      fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.userName
+    base:
+      apiVersion: identity.aws.crossplane.io/v1alpha1
+      kind: IAMAccessKey
+      metadata:
+        labels:
+          managed-by: crossplane
+      spec:
+        forProvider:
+          userName: _TBD_
+    connectionDetails:
+    - name: accessKeyId
+      type: FromConnectionSecretKey
+      fromConnectionSecretKey: username
+    - name: secretAccessKey
+      type: FromConnectionSecretKey
+      fromConnectionSecretKey: password

@@ -1,0 +1,8 @@
+apiVersion: joshgav.com/v1alpha1
+kind: UniversalBucketClaim
+metadata:
+  name: mybucket12345abcd
+  namespace: default
+spec:
+  bucketRegion: us-east-1
+  costCenter: 'josh'
