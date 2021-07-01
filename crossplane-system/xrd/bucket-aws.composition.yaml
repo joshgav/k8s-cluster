@@ -12,23 +12,22 @@ spec:
     patches:
     - type: FromCompositeFieldPath
       fromFieldPath: metadata.name
+      toFieldPath: metadata.name
+    - type: FromCompositeFieldPath
+      fromFieldPath: metadata.namespace
+      toFieldPath: metadata.namespace
     - type: FromCompositeFieldPath
       fromFieldPath: metadata.name
       toFieldPath: metadata.annotations[crossplane.io/external-name]
-    - type: FromCompositeFieldPath
-      fromFieldPath: metadata.namespace
-    - type: FromCompositeFieldPath
-      fromFieldPath: metadata.namespace
-      toFieldPath: spec.writeConnectionSecretToRef.namespace
-    - type: CombineFromComposite
-      toFieldPath: spec.writeConnectionSecretToRef.name
-      combine:
-        strategy: string
-        variables:
-          - fromFieldPath: metadata.name
-          - fromFieldPath: kind
-        string:
-          fmt: "%s-%s"
+    # - type: FromCompositeFieldPath
+    #   fromFieldPath: metadata.namespace
+    #   toFieldPath: spec.writeConnectionSecretToRef.namespace
+    - fromFieldPath: "metadata.uid"
+      toFieldPath: "spec.writeConnectionSecretToRef.name"
+      transforms:
+        - type: string
+          string:
+            fmt: "%s-connsecret"
   resources:
   - name: bucket
     base:
@@ -50,7 +49,7 @@ spec:
               value: _TBD_
         writeConnectionSecretToRef:
           name: _TBD_
-          namespace: _TBD_
+          namespace: crossplane-system
     patches:
     - type: PatchSet
       patchSetName: metadata
@@ -59,7 +58,7 @@ spec:
       toFieldPath: spec.forProvider.locationConstraint
     - type: FromCompositeFieldPath
       fromFieldPath: spec.costCenter
-      toFieldPath: spec.forProvider.tagging.tagSet[0].value # CostCenter
+      toFieldPath: spec.forProvider.tagging.tagSet[0].value
     - type: ToCompositeFieldPath
       fromFieldPath: status.atProvider.arn
       toFieldPath: status.bucketARN
@@ -112,6 +111,9 @@ spec:
           description: 'policy for bucket'
           document: _TBD_
           name: _TBD_
+        writeConnectionSecretToRef:
+          name: _TBD_
+          namespace: crossplane-system
   - name: iam-user
     patches:
     - type: PatchSet
@@ -134,6 +136,9 @@ spec:
           name: default
         forProvider:
           permissionsBoundary: _refToIAMPolicy_
+        writeConnectionSecretToRef:
+          name: _TBD_
+          namespace: crossplane-system
   - name: iam-accesskey
     patches:
     - type: PatchSet
@@ -147,9 +152,14 @@ spec:
       metadata:
         labels:
           managed-by: crossplane
+      providerConfigRef:
+        name: default
       spec:
         forProvider:
           userName: _TBD_
+        writeConnectionSecretToRef:
+          name: _TBD_
+          namespace: crossplane-system
     connectionDetails:
     - name: accessKeyId
       type: FromConnectionSecretKey

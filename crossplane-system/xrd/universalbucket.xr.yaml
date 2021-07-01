@@ -6,3 +6,5 @@ metadata:
 spec:
   bucketRegion: us-east-1
   costCenter: 'josh'
+  writeConnectionSecretToRef:
+    name: mybucket-secret
