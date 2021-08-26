@@ -1,0 +1,85 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: azure-bucket
+spec:
+  compositeTypeRef:
+    apiVersion: joshgav.com/v1alpha1
+    kind: UniversalBucket
+  writeConnectionSecretsToNamespace: crossplane-system
+  patchSets:
+  - name: metadata
+    patches:
+    - type: FromCompositeFieldPath
+      fromFieldPath: metadata.name
+      toFieldPath: metadata.name
+    - fromFieldPath: "metadata.uid"
+      toFieldPath: "spec.writeConnectionSecretToRef.name"
+      transforms:
+        - type: string
+          string:
+            fmt: "%s-conndetails"
+  resources:
+  - name: bucket-group
+    base:
+      apiVersion: azure.crossplane.io/v1alpha3
+      kind: ResourceGroup
+      metadata:
+        name: storage-crossplane
+        namespace: crossplane-system
+        labels:
+          managed-by: test
+      spec:
+        location: eastus
+        deletionPolicy: Delete
+        providerConfigRef:
+          name: default
+        providerRef:
+          name: azure
+        writeConnectionSecretToRef:
+          name: storage-group-crossplane
+          namespace: crossplane-system
+  - name: bucket-account
+    base:
+      apiVersion: storage.azure.crossplane.io/v1alpha3
+      kind: Account
+      metadata:
+        name: storaccountcrossplane
+        namespace: crossplane-system
+        labels:
+          managed-by: test
+      spec:
+        resourceGroupName: storage-crossplane
+        storageAccountSpec:
+          kind: Storage
+          location: eastus
+          sku:
+            name: Standard_LRS
+            tier: Standard
+        deletionPolicy: Delete
+        providerConfigRef:
+          name: default
+        providerRef:
+          name: azure
+        writeConnectionSecretToRef:
+          name: storaccountcrossplane
+          namespace: crossplane-system
+  - name: bucket-container
+    base:
+      apiVersion: storage.azure.crossplane.io/v1alpha3
+      kind: Container
+      metadata:
+        name: crossplane
+        namespace: crossplane-system
+        labels:
+          managed-by: test
+      spec:
+        publicAccessType: container
+        deletionPolicy: Delete
+        providerConfigRef:
+          name: storaccountcrossplane
+        providerRef:
+          name: azure
+        writeConnectionSecretToRef:
+          name: storage-ctr-crossplane
+          namespace: crossplane-system

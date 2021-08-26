@@ -8,3 +8,5 @@ spec:
   costCenter: 'josh'
   writeConnectionSecretToRef:
     name: mybucket-secret
+  # compositionRef:
+  #   name: aws-bucket

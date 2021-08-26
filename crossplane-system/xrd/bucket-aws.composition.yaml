@@ -13,21 +13,12 @@ spec:
     - type: FromCompositeFieldPath
       fromFieldPath: metadata.name
       toFieldPath: metadata.name
-    - type: FromCompositeFieldPath
-      fromFieldPath: metadata.namespace
-      toFieldPath: metadata.namespace
-    - type: FromCompositeFieldPath
-      fromFieldPath: metadata.name
-      toFieldPath: metadata.annotations[crossplane.io/external-name]
-    # - type: FromCompositeFieldPath
-    #   fromFieldPath: metadata.namespace
-    #   toFieldPath: spec.writeConnectionSecretToRef.namespace
     - fromFieldPath: "metadata.uid"
       toFieldPath: "spec.writeConnectionSecretToRef.name"
       transforms:
         - type: string
           string:
-            fmt: "%s-connsecret"
+            fmt: "%s-conndetails"
   resources:
   - name: bucket
     base:
@@ -46,9 +37,9 @@ spec:
           tagging:
             tagSet:
             - key: CostCenter
-              value: _TBD_
+              value: TBD
         writeConnectionSecretToRef:
-          name: _TBD_
+          name: TBD
           namespace: crossplane-system
     patches:
     - type: PatchSet
@@ -108,11 +99,11 @@ spec:
         providerConfigRef:
           name: default
         forProvider:
-          description: 'policy for bucket'
-          document: _TBD_
-          name: _TBD_
+          description: policy for bucket
+          document: TBD
+          name: TBD
         writeConnectionSecretToRef:
-          name: _TBD_
+          name: TBD
           namespace: crossplane-system
   - name: iam-user
     patches:
@@ -135,9 +126,9 @@ spec:
         providerConfigRef:
           name: default
         forProvider:
-          permissionsBoundary: _refToIAMPolicy_
+          permissionsBoundary: ARNOfPolicy
         writeConnectionSecretToRef:
-          name: _TBD_
+          name: TBD
           namespace: crossplane-system
   - name: iam-accesskey
     patches:
@@ -156,9 +147,9 @@ spec:
         name: default
       spec:
         forProvider:
-          userName: _TBD_
+          userName: TBD
         writeConnectionSecretToRef:
-          name: _TBD_
+          name: TBD
           namespace: crossplane-system
     connectionDetails:
     - name: accessKeyId

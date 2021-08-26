@@ -37,12 +37,14 @@ spec:
             type: string
           metadata:
             type: object
+            description: info about universal bucket
             properties:
               name:
                 type: string
               namespace:
                 type: string
           spec:
+            type: object
             description: desired state of universal bucket
             properties:
               bucketRegion:
@@ -51,3 +53,22 @@ spec:
               costCenter:
                 type: string
                 description: cost center
+              writeConnectionSecretToRef:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: name of secret to write
+          status:
+            type: object
+            description: current state of universal bucket
+            properties:
+              bucketARN:
+                type: string
+                description: ARN of bucket
+              policyARN:
+                type: string
+                description: ARN of bucket policy
+              userARN:
+                type: string
+                description: ARN of user

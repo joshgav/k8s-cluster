@@ -1,0 +1,31 @@
+# https://doc.crds.dev/github.com/crossplane/provider-aws/database.aws.crossplane.io/RDSInstance/v1beta1@v0.19.0
+apiVersion: database.aws.crossplane.io/v1beta1
+kind: RDSInstance
+metadata:
+  name: aws-mariadb
+  namespace: default
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    allocatedStorage: 20
+    allowMajorVersionUpgrade: true
+    applyModificationsImmediately: true
+    autoMinorVersionUpgrade: true
+    dbInstanceClass: db.t3.small
+    dbName: mydb
+    engine: mariadb
+    engineVersion: "10.5"
+    masterUsername: admin
+    port: 3306
+    publiclyAccessible: true
+    region: us-east-1
+    tags:
+      - key: managed-by
+        value: crossplane
+  providerConfigRef:
+    name: default
+  providerRef:
+    name: aws
+  writeConnectionSecretToRef:
+    name: aws-mariadb-secret
+    namespace: default
