@@ -3,7 +3,17 @@
 this_dir=$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)
 root_dir=$(cd "$(dirname ${BASH_SOURCE[0]})/.." && pwd)
 
-kubeadm init --config ${this_dir}/init.yaml
+temp_config_path=$(mktemp)
+config_dir=${this_dir}/config
+cat ${config_dir}/init.yaml >> ${temp_config_path}
+cat ${config_dir}/cluster.yaml >> ${temp_config_path}
+cat ${config_dir}/kubelet.yaml >> ${temp_config_path}
+cat ${config_dir}/kube-proxy.yaml >> ${temp_config_path}
+kubeadm init --config ${temp_config_path}
+## for upgrade
+# new_version=1.22.1
+# kubeadm upgrade plan --config ${temp_config_path}
+# kubeadm upgrade apply v${new_version} --config ${temp_config_path}
 
 ## if calling kubectl manually, copy admin.conf first:
 # mkdir -p $HOME/.kube
@@ -38,8 +48,3 @@ spec:
       nodeSelector: all()
 EOF
 
-# modified NetworkManager/conf.d/calico.conf to exclude `cali` and `tunl` interfaces from nm management
-
-# created /etc/resolv.conf.k8s and referred to it in kubeletConfigurations
-  # as kubeletConfiguration.resolvConf
-  # and as nodeRegistration.extraKubeletArgs ("--resolv-conf: /etc/resolv.conf.k8s")
