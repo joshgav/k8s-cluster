@@ -1,5 +1,9 @@
 # OpenShift on libvirtd
 
+## okd
+- https://github.com/openshift/okd/blob/master/Guides/UPI/libvirt/libvirt.md
+- https://github.com/openshift/okd/blob/master/Guides/UPI/vSphere_govc/Requirements/DNS_Bind.md
+
 previous work:
   - https://github.com/openshift/installer/tree/master/docs/dev/libvirt
   - https://www.redhat.com/en/blog/installing-openshift-41-using-libvirt-and-kvm
@@ -57,6 +61,21 @@ xCOS:
 
 - Machine Config Operator manages nodes
 - Cluster Version Operator
+
+## Troubleshooting
+- error: cannot read /var/lib/libvirt/openshift-images/... - permission denied
+  set `security_driver = 'none'` in `/etc/libvirt/qemu.conf`
+- for libvirt, checkout github.com/openshift/installer to a fixed release tag, e.g. `release-4.10` and run `TAGS=libvirt hack/build.sh`
+
+- https://github.com/openshift/installer/blob/master/docs/dev/alternative_release_image_sources.md
+  - latest release: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/release.txt
+
+- if cluster-bootstrap fails:
+  - remove cluster-bootstrap container - `podman container rm cluster-bootstrap`
+  - remove all static manifests at /etc/kubernetes/manifests _except_ etcd-member-pod.yaml
+      `sudo rm /etc/kubernetes/manifests/{kube-apiserver-pod,kube-controller-manager-pod,kube-scheduler-pod,cloud-credential-operator-pod,bootstrap-pod}.yaml`
+ 
+- removed /etc/hosts entry for IPv6 localhost
 
 ## Other Infrastructure
 

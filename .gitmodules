@@ -1,0 +1,3 @@
+[submodule "openshift/src/installer"]
+	path = openshift/src/installer
+	url = git@github.com:openshift/installer.git

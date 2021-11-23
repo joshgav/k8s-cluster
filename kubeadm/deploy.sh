@@ -48,3 +48,4 @@ spec:
       nodeSelector: all()
 EOF
 
+kubectl set env -n calico-system daemonset/calico-node IP_AUTODETECTION_METHOD=can-reach=8.8.8.8

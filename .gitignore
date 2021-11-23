@@ -1,1 +1,4 @@
-/temp
+openshift/_wrkdir
+openshift/keys
+.env
+temp/

@@ -1,5 +1,0 @@
-pull-secret.txt
-*.key
-# includes pull secrets
-install-config.yaml
-_wrkdir/

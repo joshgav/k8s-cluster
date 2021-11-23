@@ -1,0 +1,35 @@
+$ORIGIN joshgav.com.
+$TTL    604800
+
+@       IN      SOA     jugsrv01.joshgav.com. admin.joshgav.com. (
+                  1     ; Serial
+             604800     ; Refresh
+              86400     ; Retry
+            2419200     ; Expire
+             604800     ; Negative Cache TTL
+)
+
+				IN      NS      jugsrv01.joshgav.com.
+
+jugsrv01.joshgav.com.          IN      A       192.168.2.1
+
+api.ocp4.joshgav.com.         IN    A    192.168.2.11
+api-int.ocp4.joshgav.com.     IN    A    192.168.2.11
+*.apps.ocp4.joshgav.com.      IN    A    192.168.2.11
+
+; master-01.ocp4.joshgav.com.        IN      A      CONTROL_PLANE_0_IP
+; master-02.ocp4.joshgav.com.        IN      A      CONTROL_PLANE_1_IP
+; master-03.ocp4.joshgav.com.        IN      A      CONTROL_PLANE_2_IP
+; worker-01.ocp4.joshgav.com.        IN      A      COMPUTE_NODE_0_IP
+; worker-02.ocp4.joshgav.com.        IN      A      COMPUTE_NODE_1_IP
+
+; console-openshift-console.apps.ocp4.joshgav.com.     IN     A     BASTION_IP
+; oauth-openshift.apps.ocp4.joshgav.com.     IN     A     BASTION_IP
+
+etcd-0.ocp4.joshgav.com.    IN    A     192.168.2.11
+etcd-1.ocp4.joshgav.com.    IN    A     192.168.2.12
+etcd-2.ocp4.joshgav.com.    IN    A     192.168.2.13
+
+_etcd-server-ssl._tcp.ocp4.joshgav.com.    86400     IN    SRV     0    10    2380    etcd-0.ocp4
+_etcd-server-ssl._tcp.ocp4.joshgav.com.    86400     IN    SRV     0    10    2380    etcd-1.ocp4
+_etcd-server-ssl._tcp.ocp4.joshgav.com.    86400     IN    SRV     0    10    2380    etcd-2.ocp4
