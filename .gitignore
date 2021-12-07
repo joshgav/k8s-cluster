@@ -1,4 +1,4 @@
 openshift/_wrkdir
-openshift/keys
+openshift/secrets
 .env
 temp/

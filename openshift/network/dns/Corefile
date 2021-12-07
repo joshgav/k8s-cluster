@@ -1,0 +1,9 @@
+openshift.lab {
+  log
+  file /etc/coredns/openshift.lab.zone
+  errors
+}
+
+. {
+  forward . 8.8.8.8 9.9.9.9
+}

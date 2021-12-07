@@ -46,6 +46,11 @@ spec:
       encapsulation: VXLANCrossSubnet
       natOutgoing: Enabled
       nodeSelector: all()
+    nodeAddressAutoDetectionV4:
+      canReach: '8.8.8.8'
 EOF
 
-kubectl set env -n calico-system daemonset/calico-node IP_AUTODETECTION_METHOD=can-reach=8.8.8.8
+# otherwise network calls for DNS (at least) fail...
+firewall-cmd --add-masquerade --permanent
+firewall-cmd --reload
+# kubectl set env -n calico-system daemonset/calico-node IP_AUTODETECTION_METHOD=can-reach=8.8.8.8
