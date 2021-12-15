@@ -1,7 +1,7 @@
 <domain type='qemu'>
   <name>${domain_name}</name>
   <title>${domain_name}</title>
-  <memory unit='GiB'>16</memory>
+  <memory unit='GiB'>24</memory>
   <vcpu>12</vcpu>
   <os>
     <type arch='x86_64' machine='pc'>hvm</type>
@@ -19,7 +19,7 @@
       <target dev='vda' bus='virtio'/>
       <boot order='1'/>
     </disk>
-    <interface trustGuestRxFilters='yes' type='bridge'>
+    <interface type='bridge'>
       <source bridge='br0'/>
       <mac address='52:52:52:66:66:20'/>
     </interface>

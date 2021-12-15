@@ -30,7 +30,7 @@ fi
 
 if [[ ! -e "${runtime_disk_path}" ]]; then
     echo "create new runtime disk at ${runtime_disk_path}"
-    qemu-img create -f qcow2 ${runtime_disk_path} 40G
+    qemu-img create -f qcow2 ${runtime_disk_path} 120G
 fi
 
 echo "write domain xml"

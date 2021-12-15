@@ -30,3 +30,4 @@
 - Ensure dynamic pod interfaces are excluded from NetworkManager management. In the `[keyfile]` section of NetworkManager.conf or /etc/NetworkManager/conf.d/* use the `unmanaged-devices` key.
 - okay to ignore: `overlayfs: unrecognized mount option "volatile" or missing value`
 - okay to ignore: `failed to get container stats`: https://github.com/kubernetes/kubernetes/issues/56850
+- okay to ignore: storageError when acquiring lease

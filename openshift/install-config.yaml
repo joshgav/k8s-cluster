@@ -9,7 +9,7 @@ controlPlane:
   name: master
   replicas: 1
 networking:
-  networkType: OpenShiftSDN
+  networkType: OVNKubernetes
   clusterNetwork:
     - cidr: 10.128.0.0/14
       hostPrefix: 23
