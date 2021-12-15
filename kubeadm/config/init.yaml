@@ -5,12 +5,6 @@ localAPIEndpoint:
   advertiseAddress: 192.168.1.201
   bindPort: 6443
 nodeRegistration:
-  # criSocket: "unix:///var/run/dockershim.sock"
-  criSocket: "unix:///var/run/crio/crio.sock"
   name: jugsrv01
-  # node-specific special resolv.conf
-  kubeletExtraArgs:
-    "resolv-conf": "/etc/resolv.conf.k8s"
+  criSocket: "unix:///var/run/crio/crio.sock"
   taints: []
-  # - effect: NoSchedule
-  #   key: node-role.kubernetes.io/master

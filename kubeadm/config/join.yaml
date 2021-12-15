@@ -10,6 +10,6 @@ discovery:
   timeout: 5m0s
   tlsBootstrapToken: abcdef.0123456789abcdef
 nodeRegistration:
-  criSocket: /var/run/docker.sock
-  name: jugsrv01
-  taints: null
+  name: jugsrv02
+  criSocket: "unix:///var/run/crio/crio.sock"
+  taints: []
