@@ -12,7 +12,7 @@ spec:
   persistentVolumeReclaimPolicy: Delete
   storageClassName: local-storage
   local:
-    path: /dev/sdb2
+    path: /dev/sda2
     fsType: ext4
   nodeAffinity:
     required:
