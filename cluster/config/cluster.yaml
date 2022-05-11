@@ -6,16 +6,16 @@ imageRepository: k8s.gcr.io
 kubernetesVersion: ${kubernetes_version}
 certificatesDir: /etc/kubernetes/pki
 networking:
-  dnsDomain: cluster.local
-  serviceSubnet: 10.96.0.0/12
-  podSubnet: 10.80.0.0/12
+    dnsDomain: cluster.local
+    serviceSubnet: 10.96.0.0/12
+    podSubnet: 10.80.0.0/12
 etcd:
-  local:
-    dataDir: /var/lib/etcd
+    local:
+        dataDir: /var/lib/etcd
 apiServer:
-  timeoutForControlPlane: 4m0s
-  certSANs:
-    - remote.joshgav.com
-    - "192.168.1.201"
+    timeoutForControlPlane: 4m0s
+    certSANs:
+      - remote.joshgav.com
+      - "192.168.1.201"
 controllerManager: {}
 scheduler: {}
