@@ -14,5 +14,13 @@ spec:
       encapsulation: VXLANCrossSubnet
       natOutgoing: Enabled
       nodeSelector: all()
-    nodeAddressAutoDetectionV4:
-      canReach: '8.8.8.8'
+    nodeAddressAutodetectionV4:
+      cidrs:
+        - "192.168.126.0/24"
+      # canReach: '8.8.8.8'
+---
+apiVersion: operator.tigera.io/v1
+kind: APIServer
+metadata:
+  name: default
+spec: {}
