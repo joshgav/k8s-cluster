@@ -9,3 +9,5 @@ nodeRegistration:
     criSocket: "unix:///var/run/containerd/containerd.sock"
     # remove control-plane taint
     taints: []
+    kubeletExtraArgs:
+        "resolv-conf": "/home/joshgav/src/k8senv/cluster/resolv.conf.k8s"
