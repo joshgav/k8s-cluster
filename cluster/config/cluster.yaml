@@ -1,5 +1,18 @@
 ---
 apiVersion: kubeadm.k8s.io/v1beta3
+kind: InitConfiguration
+localAPIEndpoint:
+    advertiseAddress: 192.168.126.10
+    bindPort: 6443
+nodeRegistration:
+    name: master01
+    criSocket: "unix:///var/run/containerd/containerd.sock"
+    # remove control-plane taint
+    taints: []
+    kubeletExtraArgs:
+        "resolv-conf": "/home/joshgav/src/k8senv/cluster/resolv.conf.k8s"
+---
+apiVersion: kubeadm.k8s.io/v1beta3
 kind: ClusterConfiguration
 clusterName: kubernetes
 controlPlaneEndpoint: ${apiserver_san}

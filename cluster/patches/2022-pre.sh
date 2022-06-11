@@ -41,6 +41,7 @@ sysctl --system
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd-systemd
 mkdir -p /etc/containerd
 containerd config default | tee /etc/containerd/config.toml
+# spaces are exact
 sed -i 's/            SystemdCgroup = false/            SystemdCgroup = true/' /etc/containerd/config.toml
 systemctl restart containerd.service
 
