@@ -34,9 +34,6 @@ if [[ ${kubelet_manifest_count} == 0 ]]; then
 
     echo "INFO: running kubeadm init"
     kubeadm init --config ${temp_config_path}
-
-    echo "INFO: patches/2022-post.sh"
-    ${this_dir}/patches/2022-post.sh
 fi
 
 ## if calling kubectl manually, copy admin.conf first:
@@ -49,14 +46,12 @@ else
     export KUBECONFIG=/etc/kubernetes/admin.conf
 fi
 
-# echo "installing calico pod network"
-# kubectl apply -f https://projectcalico.docs.tigera.io/manifests/calico.yaml
-# kubectl apply -f https://projectcalico.docs.tigera.io/manifests/tigera-operator.yaml
-# kubectl apply -f ${this_dir}/config/calico_installation.yaml
-# cp -f /opt/cni/bin/* /usr/libexec/cni/
+echo "installing calico pod network"
+kubectl apply -f https://projectcalico.docs.tigera.io/manifests/tigera-operator.yaml
+kubectl apply -f ${this_dir}/config/calico_installation.yaml
 
-# echo "registering local persistent volume and storageclass"
-# kubectl apply -f ${this_dir}/pv.yaml
+echo "registering local persistent volume and storageclass"
+kubectl apply -f ${this_dir}/pv.yaml
 
-# echo "install and configure metallb controller"
-# ${this_dir}/lb.sh
+echo "install and configure metallb controller"
+${this_dir}/lb.sh

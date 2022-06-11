@@ -1,7 +1,16 @@
-Raw notes and scripts for installing Kubernetes clusters and various operators.
+## k8senv
+
+Install Kubernetes clusters, controllers, and apps.
 
 ```bash
-mkdir -p $HOME/.kube
-sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
+sudo -E OVERWRITE_KUBECONFIG=1 cluster/deploy.sh
+```
+
+## Notes
+
+To configure `crictl`.
+
+```bash
+export IMAGE_SERVICE_ENDPOINT=unix:///run/containerd/containerd.sock
+export CONTAINER_RUNTIME_ENDPOINT=${IMAGE_SERVICE_ENDPOINT}
 ```
