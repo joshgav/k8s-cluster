@@ -2,6 +2,7 @@
 apiVersion: kubeadm.k8s.io/v1beta3
 kind: ClusterConfiguration
 clusterName: kubernetes
+controlPlaneEndpoint: ${apiserver_san}
 imageRepository: k8s.gcr.io
 kubernetesVersion: ${kubernetes_version}
 certificatesDir: /etc/kubernetes/pki
@@ -11,11 +12,17 @@ networking:
     podSubnet: 10.80.0.0/12
 etcd:
     local:
-        dataDir: /var/lib/etcd
+        extraArgs:
+            name: master01
+            listen-peer-urls: https://0.0.0.0:2380
+            listen-client-urls: https://0.0.0.0:2379
+            listen-metrics-urls: http://0.0.0.0:2381
+            advertise-client-urls: https://${host_ip}:2379
+            initial-advertise-peer-urls: https://${host_ip}:2380
 apiServer:
     timeoutForControlPlane: 4m0s
     certSANs:
       - "${apiserver_san}"
-      - "192.168.126.10"
+      - "${host_ip}"
 controllerManager: {}
 scheduler: {}

@@ -26,6 +26,7 @@ if [[ ${kubelet_manifest_count} == 0 ]]; then
 
     ## TODO: extract further
     export apiserver_san=api.cluster1.joshgav.com
+    export host_ip=192.168.126.10
 
     cat ${config_dir}/init.yaml | envsubst >> ${temp_config_path}
     echo "" >> ${temp_config_path}
